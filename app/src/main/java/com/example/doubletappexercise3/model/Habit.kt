@@ -1,21 +1,24 @@
 package com.example.doubletappexercise3.model
 
-enum class Priority {
-    HIGH,
-    MEDIUM,
-    LOW
-}
+import java.io.Serializable
 
-enum class TypeHabit {
-    GOOD,
-    BAD
-}
+//enum class Priority {
+//    HIGH,
+//    MEDIUM,
+//    LOW
+//}
+//
+//enum class TypeHabit {
+//    GOOD,
+//    BAD
+//}
+// TODO ращобраться с работай енамов и изменить создание объектов
 
 class Habit(
     val name: String,
     val description: String,
-    val priority: Priority,
-    val type: TypeHabit,
+    val priority: String,
+    val type: String,
+    val frequency: String,
     val periodicity: String
-) {
-}
+) : Serializable
