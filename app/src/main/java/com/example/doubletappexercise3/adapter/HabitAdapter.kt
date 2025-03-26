@@ -10,9 +10,7 @@ import com.example.doubletappexercise3.R
 import com.example.doubletappexercise3.model.Habit
 
 class HabitAdapter(
-    var habits: List<Habit>,
-    var context: Context,
-    private val onItemClick: (Int) -> Unit
+    var habits: MutableList<Habit>, var context: Context, private val onItemClick: (Int) -> Unit
 ) : RecyclerView.Adapter<HabitAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -21,6 +19,11 @@ class HabitAdapter(
         val priority: TextView = view.findViewById(R.id.habit_priority)
         val type: TextView = view.findViewById(R.id.habit_type)
         val periodicity: TextView = view.findViewById(R.id.habit_periodicity)
+    }
+
+    fun addHabit(habit: Habit) {
+        habits.add(habit)
+        notifyItemInserted(habits.size - 1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

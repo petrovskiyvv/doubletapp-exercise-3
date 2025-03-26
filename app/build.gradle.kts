@@ -37,6 +37,9 @@ android {
     buildFeatures {
         compose = true
     }
+    viewBinding{
+        enable = true
+    }
 }
 
 dependencies {
@@ -54,6 +57,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
