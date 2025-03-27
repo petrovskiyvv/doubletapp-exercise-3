@@ -39,7 +39,6 @@ class EditHabitFragment : Fragment(R.layout.edit_habit_fragment) {
                 sharedViewModel.addHabit(habit)
             }
             parentFragmentManager.popBackStack()
-            parentFragmentManager.popBackStack()
         }
     }
 
