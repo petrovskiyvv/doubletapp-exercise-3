@@ -16,7 +16,7 @@ class FabFragment : Fragment(R.layout.fab_fragment) {
 
     private fun navigate() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fab_fragment, EditHabitFragment())
+            .replace(R.id.fragment_container, EditHabitFragment())
             .addToBackStack(null)
             .commit()
     }
