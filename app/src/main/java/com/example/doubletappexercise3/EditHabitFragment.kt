@@ -24,11 +24,21 @@ class EditHabitFragment : Fragment(R.layout.edit_habit_fragment) {
         super.onViewCreated(view, savedInstanceState)
         binding = EditHabitFragmentBinding.bind(view)
 
+        val habit = arguments?.getSerializable("habit") as? Habit
+        val currentPosition = arguments?.getInt("position", -1) ?: -1
+        habit?.let { populateFields(it) }
+
+
         val btnSave = binding?.btnSave
         btnSave?.setOnClickListener {
             val habit = createHabitFromInput()
             Log.d("EditHabitFragment", "Saving habit: $habit")
-            sharedViewModel.addHabit(habit)
+            if (currentPosition != -1) {
+                sharedViewModel.updateHabit(currentPosition, habit)
+            } else {
+                sharedViewModel.addHabit(habit)
+            }
+            parentFragmentManager.popBackStack()
             parentFragmentManager.popBackStack()
         }
     }
@@ -58,6 +68,28 @@ class EditHabitFragment : Fragment(R.layout.edit_habit_fragment) {
         val quantity = binding?.quantity?.text.toString()
         val period = binding?.period?.text.toString()
         return Habit(habitName, habitDescription, priorityHabit, typeHabit, quantity, period)
+    }
+
+    private fun populateFields(habit: Habit) {
+        binding?.habitName?.setText(habit.name)
+        binding?.habitDescription?.setText(habit.description)
+
+        // Устанавливаем приоритет
+        val priorityPosition = when (habit.priority) {
+            PriorityHabit.HIGH -> 0
+            PriorityHabit.MEDIUM -> 1
+            PriorityHabit.LOW -> 2
+        }
+        binding?.spinnerPriority?.setSelection(priorityPosition)
+
+        // Устанавливаем тип привычки
+        val typeRadioButtonId = when (habit.type) {
+            TypeHabit.GOOD -> R.id.radioGood
+            TypeHabit.BAD -> R.id.radioBad
+        }
+        binding?.radioGroupType?.check(typeRadioButtonId)
+        binding?.quantity?.setText(habit.frequency)
+        binding?.period?.setText(habit.periodicity)
     }
 
     override fun onDestroyView() {

@@ -14,7 +14,7 @@ import com.example.doubletappexercise3.databinding.HabitListFragmentBinding
 import com.example.doubletappexercise3.model.Habit
 import com.example.doubletappexercise3.model.SharedViewModel
 
-    class HabitListFragment : Fragment(R.layout.habit_list_fragment) {
+class HabitListFragment : Fragment(R.layout.habit_list_fragment) {
     private var binding: HabitListFragmentBinding? = null
     private lateinit var habitAdapter: HabitAdapter
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -28,11 +28,16 @@ import com.example.doubletappexercise3.model.SharedViewModel
 
         habitAdapter = HabitAdapter(mutableListOf(), requireContext()) { position ->
             val habit = sharedViewModel.habits.value?.get(position)
-            val intent = Intent(requireContext(), EditHabitActivity::class.java).apply {
-                putExtra("habit", habit)
-                putExtra("position", position)
+            val editFragment = EditHabitFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("habit", habit)
+                    putInt("position", position)
+                }
             }
-            editHabitLauncher.launch(intent)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, editFragment)
+                .addToBackStack(null)
+                .commit()
         }
         recyclerView?.adapter = habitAdapter
 
@@ -48,16 +53,17 @@ import com.example.doubletappexercise3.model.SharedViewModel
         binding = null
     }
 
-    private val editHabitLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == 1) {
-            val habit = result.data?.getSerializableExtra("habit") as Habit
-            val position = result.data?.getIntExtra("position", -1) ?: -1
-
-            if (position != -1) {
-                sharedViewModel.updateHabit(position, habit)
-            } else {
-                sharedViewModel.addHabit(habit)
-            }
-        }
-    }
+//    private val editHabitLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            if (result.resultCode == 1) {
+//                val habit = result.data?.getSerializableExtra("habit") as Habit
+//                val position = result.data?.getIntExtra("position", -1) ?: -1
+//
+//                if (position != -1) {
+//                    sharedViewModel.updateHabit(position, habit)
+//                } else {
+//                    sharedViewModel.addHabit(habit)
+//                }
+//            }
+//        }
 }
